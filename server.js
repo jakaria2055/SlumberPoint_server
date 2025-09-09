@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(clerkMiddleware())
 
 //API TO LISTN CLERK
-app.use("/api/clerk", clerkWebHook);
+app.post("/api/clerk", clerkWebHook);
 
 app.get("/", (req, res) => res.send("API is Working fine"));
 
