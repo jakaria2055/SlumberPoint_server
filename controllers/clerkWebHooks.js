@@ -24,12 +24,14 @@ const clerkWebHook = async (req, res) => {
       email: data.email_addresses[0].email_address,
       userName: data.first_name + " " + data.last_name,
       image: data.image_url,
+      recentSearchCities: [],
     };
 
     //SWITCH FOR DIFF EVENT
     switch (type) {
       case "user.created": {
         await user.create(userData);
+        console.log("✅ User created:", userData);
         break;
       }
       case "user.updated": {
