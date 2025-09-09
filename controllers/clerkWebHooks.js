@@ -27,29 +27,29 @@ const clerkWebHook = async (req, res) => {
       recentSearchCities: [],
     };
 
-    //SWITCH FOR DIFF EVENT
-    switch (type) {
-      case "user.created": {
-        await user.create(userData);
-        console.log("✅ User created:", userData);
-        break;
-      }
-      case "user.updated": {
-        await user.findByIdAndUpdate(data.id, userData);
-        break;
-      }
-      case "user.deleted": {
-        await user.findByIdAndDelete(data.id);
-        break;
-      }
+switch (type) {
+  case "user.created": {
+    console.log("📨 Creating user:", userData);
+    const created = await user.create(userData);
+    console.log("✅ Saved to DB:", created);
+    break;
+  }
+  case "user.updated": {
+    console.log("📨 Updating user:", data.id);
+    await user.findByIdAndUpdate(data.id, userData);
+    break;
+  }
+  case "user.deleted": {
+    console.log("📨 Deleting user:", data.id);
+    await user.findByIdAndDelete(data.id);
+    break;
+  }
+}
 
-      default:
-        break;
-    }
-    res.json({success: true, message: "WebHook Received"});
+    res.status(200).json({ success: true, message: "Webhook received" });
   } catch (error) {
-    console.log(error)
-    res.json({success:false,message: error.message});
+    console.log("❌ Webhook error:", error.message);
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
