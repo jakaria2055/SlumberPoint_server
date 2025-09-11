@@ -1,3 +1,4 @@
+import transporter from "../config/nodeMailer.js";
 import Booking from "../models/BookingModel.js";
 import Hotel from "../models/HotelModel.js";
 import Room from "../models/RoomModel.js";
@@ -65,6 +66,28 @@ export const createBooking = async (req, res) => {
       totalPrice,
     });
 
+    const mailOptions = {
+      from: process.env.SENDER_MAIL,
+      to: req.user.email,
+      subject: 'SlumberPoint Hotel Booking Details',
+      html: `
+         <h2>Your Booking Details</h2>
+         <p>Dear ${req.user.userName},</p>
+         <p>Thanks for your Booking. Here is Your Details: </p>
+         <ul>
+          <li>Booking ID: <strong>${booking._id}</strong></li>
+          <li>Hotel Name: <strong>${roomData.hotel.name}</strong></li>
+          <li>Location: <strong>${roomData.hotel.address}</strong></li>
+          <li>Bill Amount: <strong>$ ${booking.totalPrice} /night </strong></li>
+         </ul>
+
+         <p>We Look forward to welcoming you):</p>
+         <p>If there need any changes please feel free to contact us):</p>
+      `
+    }
+
+    await transporter.sendMail(mailOptions)
+
     res.json({ success: true, message: "Booking Successfully" });
   } catch (error) {
     console.log(error);
@@ -76,10 +99,10 @@ export const createBooking = async (req, res) => {
 export const getUserBookings = async (req, res) => {
   try {
     const user = req.user._id;
-    const booking = await Booking.find({ user })
+    const bookings = await Booking.find({ user })
       .populate("room hotel")
       .sort({ createdAt: -1 });
-    res.json({ success: true, booking });
+    res.json({ success: true, bookings });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
