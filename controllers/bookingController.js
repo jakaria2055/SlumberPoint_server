@@ -98,7 +98,7 @@ export const getHotelBookings = async (req, res) => {
       .sort({ createdAt: -1 });
 
     //TOTAL BOOKING
-    const totalBooking = bookings.length;
+    const totalBookings = bookings.length;
     //TOTAL REVENUE
     const totalRevenue = bookings.reduce(
       (acc, booking) => acc + booking.totalPrice,
@@ -107,9 +107,9 @@ export const getHotelBookings = async (req, res) => {
 
     res.json({
       success: true,
-      dashBoardData: { totalBooking, totalRevenue, bookings },
+      dashboardData: { totalBookings, totalRevenue, bookings },
     });
   } catch (error) {
-    res.json({ success: true, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };

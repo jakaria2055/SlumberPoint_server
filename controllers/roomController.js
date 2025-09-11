@@ -1,5 +1,5 @@
-import Hotel from "../models/HotelModel.js";
 import { v2 as cloudinary } from "cloudinary";
+import Hotel from "../models/HotelModel.js";
 import Room from "../models/RoomModel.js";
 
 //CREATE ROOM
@@ -54,7 +54,7 @@ export const getRooms = async (req, res) => {
 //GET ROOM OF SPECIFIC HOTEL
 export const getOwnerRooms = async (req, res) => {
   try {
-    const hotelData = await Hotel({ owner: req.auth.userId });
+    const hotelData = await Hotel.findOne({ owner: req.user._id });
     const rooms = await Room.find({ hotel: hotelData._id.toString() }).populate(
       "hotel"
     );
