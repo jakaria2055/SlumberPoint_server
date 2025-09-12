@@ -19,21 +19,27 @@ const clerkWebHook = async (req, res) => {
     //GETTING DATA FROM REQUEST BODY
     const { data, type } = req.body;
 
-    const userData = {
-      _id: data.id,
-      email: data.email_addresses[0].email_address,
-      userName: data.first_name + " " + data.last_name,
-      image: data.image_url,
-      recentSearchCities: [],
-    };
-
     //SWITCH FOR DIFF EVENT
     switch (type) {
       case "user.created": {
+        const userData = {
+          _id: data.id,
+          email: data.email_addresses[0].email_address,
+          userName: data.first_name + " " + data.last_name,
+          image: data.image_url,
+          recentSearchCities: [],
+        };
         await User.create(userData);
         break;
       }
       case "user.updated": {
+        const userData = {
+          _id: data.id,
+          email: data.email_addresses[0].email_address,
+          userName: data.first_name + " " + data.last_name,
+          image: data.image_url,
+          recentSearchCities: [],
+        };
         await User.findByIdAndUpdate(data.id, userData);
         break;
       }
@@ -45,10 +51,10 @@ const clerkWebHook = async (req, res) => {
       default:
         break;
     }
-    res.json({success: true, message: "WebHook Received"});
+    res.json({ success: true, message: "WebHook Received" });
   } catch (error) {
-    console.log(error)
-    res.json({success:false,message: error.message});
+    console.log(error);
+    res.json({ success: false, message: error.message });
   }
 };
 
